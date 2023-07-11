@@ -35,11 +35,27 @@ export default function ToDoList({ user }) {
         .catch(alert)
     }
 
+    const handleItemDelete = (id) => {
+        const itemDelete = { id }
+
+        fetch(`https://chekov-api-kd.web.app/tasks/${user.uid}`, {
+            method: 'DELETE',
+            headers: {'Content-type': 'application/json'
+        },
+        body: JSON.stringify(itemDelete)
+    })      
+            .then( res => res.json() )
+            .then( data => {
+            setTodoItems(data)
+            })
+            .catch(alert)
+    }
+
     return (
     
     <Center w="100%">
         <Box maxW={300} w="100%">
-            <VStack space={4} borderColor="green.300" borderWidth={2}>
+            <VStack space={4} >
             <TodoHeader user={user} setTodoItems={setTodoItems} />
             {!todoItems 
                 ? <Text fontSize="lg" color="coolGray.300" textAlign="center">Loading...</Text>
@@ -52,12 +68,17 @@ export default function ToDoList({ user }) {
                             handleItemUpdate(thisItemId, thisItemDone)} />
                         <Text 
                         fontSize={18} 
+                        onPress={ () => handleItemUpdate(thisItemId, thisItemDone) }
                         mx={2} 
                         strikeThrough={item.done}
                         color={item.done ? 'coolGray.500' : 'coolGray.100'}
                         textAlign="left"
-                        width="100%"
+                        width="50%"
                         >{item.title}</Text>
+                        <Text onPress={() => handleItemDelete(thisItemId)} fontSize={18} mx={2} color={'coolGray.400'} textAlign="right">
+                            🗑️
+                
+                        </Text>
                     </HStack>
   )})
 }
