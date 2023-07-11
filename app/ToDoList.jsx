@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Center, Box, Heading, VStack, HStack, Checkbox, Text } from "native-base";
-import TodoHeader from "./TodoHeader";
+import { useState, useEffect } from 'react'
+import { Center, Box, VStack, HStack, Checkbox, Text } from "native-base"
+import TodoHeader from './TodoHeader'
 
 
 export default function ToDoList({ user }) { 
@@ -9,13 +9,32 @@ export default function ToDoList({ user }) {
 
     useEffect(() => {
         if(user) {
-            fetch(`https://chekov-api-kd.web.app/tasks/${user.uid}`,)
+            console.log("Getting at: " + `https://chekov-api-kd.web.app/tasks/${user.uid}`)
+            fetch(`https://chekov-api-kd.web.app/tasks/${user.uid}`)
             .then(res => res.json())
             .then(setTodoItems)
             .catch(alert)
-    }
+        }
     }, [user])
     
+    const handleItemUpdate = (id, done) => {
+        const itemUpdate = { id, done: !done}
+        console.log(`https://chekov-api-kd.web.app/tasks/${user.uid}`)
+        fetch(`https://chekov-api-kd.web.app/tasks/${user.uid}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(itemUpdate)
+        })
+        .then( res => res.json() )
+        .then( data => {
+            console.log(data)
+            setTodoItems(data)
+        })
+        .catch(alert)
+    }
+
     return (
     
     <Center w="100%">
@@ -24,9 +43,13 @@ export default function ToDoList({ user }) {
             <TodoHeader user={user} setTodoItems={setTodoItems} />
             {!todoItems 
                 ? <Text fontSize="lg" color="coolGray.300" textAlign="center">Loading...</Text>
-                : todoItems.map(item => (
+                : todoItems.map(item => {
+                    const thisItemId = item.id 
+                    const thisItemDone = item.done
+                    return (
                     <HStack key={item.id} w="100%" justifyContent="space-between" alignItems="center">
-                        <Checkbox aria-label={item.title} isChecked={item.done} />
+                        <Checkbox aria-label={item.title} isChecked={item.done} onChange={ () => 
+                            handleItemUpdate(thisItemId, thisItemDone)} />
                         <Text 
                         fontSize={18} 
                         mx={2} 
@@ -36,10 +59,10 @@ export default function ToDoList({ user }) {
                         width="100%"
                         >{item.title}</Text>
                     </HStack>
-                ))
-            }
+  )})
+}
             </VStack>
         </Box>
     </Center>
-        )
+    )
 }

@@ -1,7 +1,7 @@
-import { useState,} from 'react'
-import { Center, Box, Heading, VStack, FormControl, Input, Button, Text } from "native-base";
-import { signInWithEmailAndPassword  } from 'firebase/auth';
-import { auth } from './fbConfig';
+import { useState } from 'react'
+import { Center, Box, Heading, VStack, FormControl, Input, Button, Text } from 'native-base'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from './fbConfig'
 
 export default function Login({ setUser }) {
     

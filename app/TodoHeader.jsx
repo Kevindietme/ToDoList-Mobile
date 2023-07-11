@@ -6,7 +6,7 @@ export default function TodoHeader({ setTodoItems, user }) {
     const [newItem, setNewItem] = useState('')
 
     const addNewItem = () => {
-        if(!newItem.length < 3) return
+        if(newItem.length < 3) return
         const newTodoItem = {
             uid: user.uid,
             title: newItem,
@@ -28,7 +28,7 @@ export default function TodoHeader({ setTodoItems, user }) {
 
     return (
         <HStack space={2}>
-            <Input value={newItem} onChangeText={setNewItem} size="lg" color="coolGray.200" flex={1} />
+            <Input value={newItem} onChangeText={setNewItem} size="lg" color="coolGray.200" flex={1} placeholder='Add Item' />
                 <Button onPress={addNewItem}>Add</Button>        
         </HStack>
     )
